@@ -1,0 +1,18 @@
+---
+title: "exam_1"
+author: "Carter Martindale"
+date: "10/7/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1
+
+```{r q1, echo = FALSE}
+
+
+
+```
