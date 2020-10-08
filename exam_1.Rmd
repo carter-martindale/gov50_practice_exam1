@@ -116,5 +116,27 @@ avg_pell <- colleges %>%
 q5 <- inner_join(avg_pell, avg_results, by = "state")
 
 ```
+## Question 6
+
+```{r q6}
+
+avg_first <- colleges %>% 
+  filter(state != "GU" & state != "VI" & 
+           !is.na(first_gen_completion_4)) %>% 
+  group_by(state, locale) %>% 
+  summarize(average = mean(first_gen_completion_4,
+                           na.rm = TRUE),
+            .groups = "drop")
+
+```
+## Question 7
+
+```{r q7}
+wider <- avg_first %>% 
+  pivot_wider(names_from = state,
+              values_from = average)
+
+
+```
 
 
