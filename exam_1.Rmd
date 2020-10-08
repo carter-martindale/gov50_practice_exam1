@@ -11,6 +11,7 @@ library(readr)
 library(tidyverse)
 library(dplyr)
 library(ggplot2)
+library(fec16)
 ```
 
 ## Question 1
@@ -86,4 +87,34 @@ regional_religion %>%
 
 
 ```
+## Question 4
+
+```{r q4}
+
+q4 <- colleges %>% 
+  mutate(id_replicate = str_sub(id, 1, 4)) %>% 
+  select(id, id_replicate, id_long)
+
+```
+## Question 5
+
+```{r q5}
+avg_results <- results_house %>% 
+  filter(party == "D") %>% 
+  group_by(state) %>% 
+  summarise(avg_results = mean(general_percent,
+                               na.rm = TRUE,
+                               .groups = "drop"))
+
+avg_pell <- colleges %>% 
+  group_by(state) %>% 
+  summarise(avg_pell = mean(pell_grant,
+                            na.rm = TRUE,
+                            .groups = "drop")) %>% 
+  filter(state != "GU" & state != "VI")
+
+q5 <- inner_join(avg_pell, avg_results, by = "state")
+
+```
+
 
