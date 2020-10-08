@@ -136,7 +136,11 @@ wider <- avg_first %>%
   pivot_wider(names_from = state,
               values_from = average)
 
-
+longer <- wider %>% 
+  pivot_longer(cols = AK:WY, names_to = "state",
+               values_to = "average",
+               values_drop_na = TRUE) %>% 
+  arrange(state)
 ```
 
 
