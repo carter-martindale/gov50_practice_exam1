@@ -7,12 +7,83 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
 ```
 
 ## Question 1
 
 ```{r q1, echo = FALSE}
 
+colleges <- tibble(read_csv("raw_data/college_scorecard.csv",
+                   col_types = cols(name = col_character(),
+                                    state = col_character(),
+  region = col_character(),
+  campuses = col_double(),
+  id_long = col_double(),
+  id = col_double(),
+  locale = col_character(),
+  ug_enrollment = col_character(),
+  main_campus = col_double(),
+  hbcu = col_double(),
+  women_only = col_double(),
+  religious_affiliation = col_double(),
+  admission_rate = col_double(),
+  class = col_double(),
+  social_sciences = col_double(),
+  humanities = col_double(),
+  physical_sciences = col_double(),
+  ethnic_gender_studies = col_double(),
+  comp_sci = col_double(),
+  avg_faculty_salary = col_double(),
+  completion_rate = col_character(),
+  pell_grant = col_double(),
+  first_gen_completion_4 = col_double())))
+
+q1 <- colleges %>% 
+  filter(state == "NJ") %>% 
+  arrange(desc(pell_grant)) %>% 
+  select(name, pell_grant) %>% 
+  head(10)
+
+```
+
+## Question 2
+
+```{r q2}
+
+regional_religion <- colleges %>% 
+  group_by(region) %>% 
+  summarise(religious_num = sum(religious_affiliation,
+                                na.rm = TRUE),
+            religious_prop = religious_num / n(),
+            .groups = "drop")
+
+```
+
+## Question 3
+
+```{r q3}
+
+regional_religion %>% 
+  filter(!region == "US Service Schools") %>% 
+  ggplot(aes(x = fct_reorder(region, religious_prop),
+             y = religious_prop)) +
+  geom_bar(stat = "identity", fill = "#69A297") +
+  coord_flip() +
+           theme_bw() +
+  scale_y_continuous(breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+                     labels = c("0%", "10%", "20%", "30%",
+                                "40%", "50%")) +
+  labs(title = "Proportion of Colleges in Each
+       US Region with a Religious Affiliation",
+       y = "Religious Proportion",
+       x = "Region")
+             
+
 
 
 ```
+
